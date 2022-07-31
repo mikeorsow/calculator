@@ -6,13 +6,15 @@ body {
 }
 
 .container {
-    padding: 20px;
+    padding: 20px 20px 40px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 600px;
-    width: 500px;
+    height: auto;
+    width: 400px;
     border: #000 2px solid;
+    background-color: #3C3E40;
+    border-radius: 8px;
 }
 
 #display {
@@ -31,12 +33,45 @@ body {
     padding-right: 20px;
 }
 
+.buttons {
+    display: flex;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.operators {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.operators div {
+    flex: auto;
+    border: #000 2px solid;
+    height: 100px;
+    width: 100px;
+    justify-content: space-between;
+}
+
 .numbers {
     display: flex;
     flex-flow: row wrap;
+    gap: 20px;
+    justify-content: space-between;
 }
 
-.number {
-    height: 50px;
-    width: 50px;
+.number,
+.operators button {
+    border-radius: 4px;
+    display: flex;
+    flex: 1 0 1;
+    align-items: center;
+    justify-content: center;
+    border: #979797 2px solid;
+    height: 80px;
+    width: 80px;
+    font-size: 44px;
+    color: #fff;;
+    background-color: #393939;
 }
