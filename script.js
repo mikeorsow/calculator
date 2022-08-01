@@ -3,12 +3,16 @@ let subTotal = "";
 let total = "";
 let currentOperator = "";
 
-const numberButtons = document.querySelectorAll(".number");
 const plusButton = document.querySelector("#sum");
-const equalsButton = document.querySelector("#equals");
-
 plusButton.addEventListener("click", () => displayOnScreen(sum()));
+
+const minusButton = document.querySelector("#minus");
+minusButton.addEventListener("click", () => displayOnScreen(minus()));
+
+const equalsButton = document.querySelector("#equals");
 equalsButton.addEventListener("click", () => showTotal());
+
+const numberButtons = document.querySelectorAll(".number");
 numberButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     // start a new number if there is no operator
