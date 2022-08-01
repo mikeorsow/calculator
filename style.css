@@ -65,7 +65,8 @@ body {
 }
 
 .number,
-.operators button {
+.operators button,
+#equals {
     border-radius: 4px;
     display: flex;
     flex: 1 0 1;
