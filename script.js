@@ -3,12 +3,21 @@ let subTotal = "";
 let total = "";
 let currentOperator = "";
 
+let equation = {
+    value1: '',
+    value2: '',
+    operator: '',
+};
+
+// need to think through the if/then for values in the object, then need to work out the 'run equation' piece
+
 const numberButtons = document.querySelectorAll(".number");
 const plusButton = document.querySelector("#sum");
 const equalsButton = document.querySelector("#equals");
 
 plusButton.addEventListener("click", () => displayOnScreen(sum()));
 equalsButton.addEventListener("click", () => showTotal());
+
 numberButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     // start a new number if there is no operator
