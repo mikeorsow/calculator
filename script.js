@@ -1,17 +1,14 @@
-const displayed = document.querySelector("#display > p");
-const numberButtons = document.querySelectorAll(".number");
-const sumButton = document.querySelector("#sum");
-const equalsButton = document.querySelector("#equals");
-
 let currentNumber = "";
 let subTotal = "";
 let total = "";
 let currentOperator = "";
 
-const displayOnScreen = (num) => {
-  document.querySelector("#display > p").textContent = num;
-};
+const numberButtons = document.querySelectorAll(".number");
+const plusButton = document.querySelector("#sum");
+const equalsButton = document.querySelector("#equals");
 
+plusButton.addEventListener("click", () => displayOnScreen(sum()));
+equalsButton.addEventListener("click", () => showTotal());
 numberButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     // start a new number if there is no operator
@@ -23,22 +20,21 @@ numberButtons.forEach((button) => {
   });
 });
 
-sumButton.addEventListener("click", () => {
-  return (displayed.textContent = sum());
-});
+const displayOnScreen = (num) => {
+    document.querySelector("#display > p").textContent = num;
+  };
 
 const sum = () => {
   currentOperator = "plus";
+  // When a user clicks the equals button, then clicks the plus button, we need to use the total as the current number.
   if (currentNumber == "" && subTotal == "") {
-    subTotal = total;
-  } else {
-    subTotal = Number(currentNumber) + Number(subTotal);
+    currentNumber = total;
   }
+  subTotal = Number(currentNumber) + Number(subTotal);
+  // Reset currentNumber after hitting plus key
   currentNumber = "";
   return subTotal;
 };
-
-equalsButton.addEventListener("click", () => showTotal());
 
 const showTotal = () => {
   if (currentOperator == "") {
@@ -47,8 +43,9 @@ const showTotal = () => {
   if (currentOperator == "plus") {
     total = sum();
   }
-  //clear everything except Total
+  // Clear everything except total, since it might be used in the next calculation
   subTotal = "";
-  (currentNumber = ""), (currentOperator = "");
-  return (displayed.textContent = total);
+  currentNumber = "";
+  currentOperator = "";
+  return displayOnScreen(total);
 };
