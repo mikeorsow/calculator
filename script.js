@@ -1,14 +1,5 @@
-
 // on clear
 // clear() => v1 = '', v2='', operator = '', canAppend = true
-
-// To-Do: 
-// DONE - subtract
-// IN PREOGRESS - divide
-// multiply
-
-
-
 
 let value1 = '';
 let value2 = '';
@@ -54,6 +45,19 @@ divideButton.addEventListener('click', () => {
   updateDisplay();
 });
 
+const multiplyButton = document.querySelector('#multiply');
+
+multiplyButton.addEventListener('click', () => {
+  if (value1 === '') return;
+  if (value2.length > 0) {
+    value1 = evaluate(value1, value2, operator);
+    value2 = '';
+  }
+  canAppendToValue1 = false;
+  operator = 'multiply';
+  updateDisplay();
+});
+
 
 const equalsButton = document.querySelector('#equals');
 
@@ -78,11 +82,15 @@ numberButtons.forEach((button) => {
       canAppendToValue1 = true;
     } else if (operator !== '') {
       value2 += e.target.textContent;
-      console.log(`Value 2, baby.`);
     }
     updateDisplay();
   });
 });
+
+// const removeLeadingZero = () => {
+//   if (value1.indexOf(0) === 0) value1 = value1.slice(1);
+//   if (value2.indexOf(0) === 0) value2 = value2.slice(1);
+// }
 
 const evaluate = (v1, v2, operator) => {
   v1 = Number(v1);
