@@ -3,8 +3,8 @@
 // clear() => v1 = '', v2='', operator = '', canAppend = true
 
 // To-Do: 
-// IN PROGRESS - subtract
-// divide
+// DONE - subtract
+// IN PREOGRESS - divide
 // multiply
 
 
@@ -41,6 +41,18 @@ subtractButton.addEventListener('click', () => {
   updateDisplay();
 });
 
+const divideButton = document.querySelector('#divide');
+
+divideButton.addEventListener('click', () => {
+  if (value1 === '') return;
+  if (value2.length > 0) {
+    value1 = evaluate(value1, value2, operator);
+    value2 = '';
+  }
+  canAppendToValue1 = false;
+  operator = 'divide';
+  updateDisplay();
+});
 
 
 const equalsButton = document.querySelector('#equals');
