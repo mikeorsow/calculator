@@ -1,4 +1,4 @@
-// To-Do: Add keydown event listeners to everything. If KeyboardEvent.key matches numbers, . + = / x * - , then pass it through
+// To-Do: Add keydown event listeners to everything. If KeyboardEvent.key matches numbers, . + = / x * - , then assignValue(KeyboardEvent.key)
 
 let value1 = '';
 let value2 = '';
@@ -44,30 +44,32 @@ const numberButtons = document.querySelectorAll('.number');
 // NUMBER BUTTON INPUT
 numberButtons.forEach((button) => {
   button.addEventListener('click', (e) => {
-    let number = e.target.textContent;
-    // Don't allow > 1 decimal
-    if (
-      (number === '.' && hasDecimal(value1) && canAppendToValue1) ||
-      (number === '.' && hasDecimal(value2))
-    ) {
-      return;
-    }
-    // Don't let people enter a ton of zeros before the number
-    if (value1 === '0' || value2 === '0') {
-      removeLeadingZero();
-    }
-    if (canAppendToValue1) {
-      value1 += number;
-    } else if (operator === '' && !canAppendToValue1) {
-      value1 = number;
-      canAppendToValue1 = true;
-    } else if (operator !== '') {
-      value2 += number;
-    }
+    assignValue(e.target.textContent)
     updateDisplay();
   });
 });
 
+const assignValue = (input) => {
+  // Don't allow > 1 decimal
+  if (
+    (input === '.' && hasDecimal(value1) && canAppendToValue1) ||
+    (input === '.' && hasDecimal(value2))
+  ) {
+    return;
+  }
+  // Don't let people enter a ton of zeros before the number
+  if (value1 === '0' || value2 === '0') {
+    removeLeadingZero();
+  }
+  if (canAppendToValue1) {
+    value1 += input;
+  } else if (operator === '' && !canAppendToValue1) {
+    value1 = input;
+    canAppendToValue1 = true;
+  } else if (operator !== '') {
+    value2 += input;
+  }
+};
 
 const hasDecimal = (str) => {
   return str.indexOf('.') === value1.lastIndexOf('.') && str.indexOf('.') > -1;
