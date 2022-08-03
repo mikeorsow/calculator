@@ -1,11 +1,4 @@
-// details & edge cases to handle
-// divide by 0
-// DONE - multiply by 0
-// only one decimal in a number
-// DONE - if first number is a zero, replace it.
-// DONE - looooong repeating numbers
-
-// BUG - After refactor, plus is not working after equals
+// To-Do: Add keydown event listeners to everything. If KeyboardEvent.key matches numbers, . + = / x * - , then pass it through
 
 let value1 = '';
 let value2 = '';
@@ -13,7 +6,6 @@ let operator = '';
 let canAppendToValue1 = true;
 
 const plusButton = document.querySelector('#sum');
-
 plusButton.addEventListener('click', () => {
   if (value1 === '') return;
   operate(value1, value2, operator);
@@ -21,7 +13,6 @@ plusButton.addEventListener('click', () => {
 });
 
 const subtractButton = document.querySelector('#subtract');
-
 subtractButton.addEventListener('click', () => {
   if (value1 === '') return;
   operate(value1, value2, operator);
@@ -29,7 +20,6 @@ subtractButton.addEventListener('click', () => {
 });
 
 const divideButton = document.querySelector('#divide');
-
 divideButton.addEventListener('click', () => {
   if (value1 === '') return;
   operate(value1, value2, operator);
@@ -37,7 +27,6 @@ divideButton.addEventListener('click', () => {
 });
 
 const multiplyButton = document.querySelector('#multiply');
-
 multiplyButton.addEventListener('click', () => {
   if (value1 === '') return;
   operate(value1, value2, operator);
@@ -45,40 +34,47 @@ multiplyButton.addEventListener('click', () => {
 });
 
 const equalsButton = document.querySelector('#equals');
-
 equalsButton.addEventListener('click', () => {
   // ignore if no second value
   operate(value1, value2, operator);
 });
 
+const calcDisplay = document.querySelector('#display > p');
 const numberButtons = document.querySelectorAll('.number');
-
+// NUMBER BUTTON INPUT
 numberButtons.forEach((button) => {
   button.addEventListener('click', (e) => {
-    const number = e.target.textContent;
-    // Assign button click to the proper value variable
+    let number = e.target.textContent;
+    // Don't allow > 1 decimal
+    if (
+      (number === '.' && hasDecimal(value1) && canAppendToValue1) ||
+      (number === '.' && hasDecimal(value2))
+    ) {
+      return;
+    }
+    // Don't let people enter a ton of zeros before the number
+    if (value1 === '0' || value2 === '0') {
+      removeLeadingZero();
+    }
     if (canAppendToValue1) {
-      removeAnyLeadingZero();
       value1 += number;
     } else if (operator === '' && !canAppendToValue1) {
       value1 = number;
       canAppendToValue1 = true;
     } else if (operator !== '') {
-      removeAnyLeadingZero();
       value2 += number;
     }
     updateDisplay();
   });
 });
 
-const clearButton = document.querySelector('#clear');
 
-clearButton.addEventListener('click', () => clear());
-
-const removeAnyLeadingZero = () => {
-  if (value1.indexOf('0') === 0) value1 = value1.slice(1);
-  if (value2.indexOf('0') === 0) value2 = value2.slice(1);
+const hasDecimal = (str) => {
+  return str.indexOf('.') === value1.lastIndexOf('.') && str.indexOf('.') > -1;
 };
+
+const clearButton = document.querySelector('#clear');
+clearButton.addEventListener('click', () => clear());
 
 const clear = () => {
   value1 = '';
@@ -86,17 +82,18 @@ const clear = () => {
   operator = '';
   canAppendToValue1 = true;
   updateDisplay();
-  console.log('clear!');
 };
 
-const operate = (v1, v2, operator) => {
-  console.log(`operate fired`);
+const removeLeadingZero = () => {
+  if (value1.indexOf('0') === 0) value1 = value1.slice(1);
+  if (value2.indexOf('0') === 0) value2 = value2.slice(1);
+};
 
+const operate = (v1, v2, op) => {
   if (v2 === '') {
     canAppendToValue1 = false;
     return;
   }
-
   let total;
   v1 = Number(v1);
   v2 = Number(v2);
@@ -104,23 +101,31 @@ const operate = (v1, v2, operator) => {
     clear();
     return (document.querySelector(
       '#display > p'
-    ).textContent = `Inconceivable!`);
+    ).textContent = `!Inconceivable`);
   }
-  if (operator == 'plus') total = v1 + v2;
-  if (operator == 'subtract') total = v1 - v2;
-  if (operator == 'divide') total = v1 / v2;
-  if (operator == 'multiply') total = v1 * v2;
-  value2 = '';
-  operator = '';
+  if (op == 'plus') total = v1 + v2;
+  if (op == 'subtract') total = v1 - v2;
+  if (op == 'divide') total = v1 / v2;
+  if (op == 'multiply') total = v1 * v2;
+  clear();
   canAppendToValue1 = false;
-  value1 = (Math.round(total * 100000) / 100000).toString();
+  // Round the number to 10 decimal places
+  total = Math.round(total * 10 ** 10) / 10 ** 10;
+  // Display the total so that it fits on the calc screen
+  if (total.toString().length > 15) {
+    console.log(`this a long one`);
+    value1 = total.toExponential(4);
+  } else {
+    console.log(`this is short enough`);
+    value1 = total.toString();
+  }
   updateDisplay();
 };
 
 const updateDisplay = () => {
   if (value2.length > 0) {
-    document.querySelector('#display > p').textContent = value2;
+    calcDisplay.textContent = value2;
   } else {
-    document.querySelector('#display > p').textContent = value1;
+    calcDisplay.textContent = value1;
   }
 };

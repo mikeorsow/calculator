@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-    padding: 20px 20px 40px 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,7 +24,6 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    /* padding-right: 20px; */
     height: 80px;
     width: 100%;
     background-color: #949F95;
@@ -34,6 +33,9 @@ body {
 
 #display p {
     padding-right: 20px;
+    display: flex;
+    justify-content: flex-end;
+    overflow: scroll;
 }
 
 .buttons {
@@ -80,6 +82,10 @@ body {
     background-color: #393939;
 }
 
-/* .orange {
-    background-color: orange;
-} */
+#clear {
+    margin-top: 20px;
+    font-size: 24px;
+    border-style: none;
+    padding: 5px 20px;
+    background-color: rgb(255, 202, 211);
+}
