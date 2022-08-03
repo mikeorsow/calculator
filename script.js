@@ -115,7 +115,11 @@ const hasDecimal = (str) => {
 };
 
 const clearButton = document.querySelector('#clear');
-clearButton.addEventListener('click', () => {
+clearButton.addEventListener('click', (e) => {
+  if (e.propertyName !== 'cleared') {
+    clear();
+    return;
+  }
   clearButton.classList.add('cleared');
   clear();
 });
@@ -153,7 +157,7 @@ const operate = (v1, v2, op) => {
     clear();
     return (document.querySelector(
       '#display > p'
-    ).textContent = `!Inconceivable`);
+    ).textContent = `Inconceivable!`);
   }
   if (op == 'plus') total = v1 + v2;
   if (op == 'subtract') total = v1 - v2;
