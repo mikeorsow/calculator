@@ -1,5 +1,4 @@
 // To-do: Refactor the hasDecimal block... I don't know how I made it work lol.
-
 let value1 = '';
 let value2 = '';
 let operator = '';
