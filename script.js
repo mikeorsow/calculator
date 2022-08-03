@@ -1,4 +1,4 @@
-// To-Do: Add keydown event listeners to everything. If KeyboardEvent.key matches numbers, . + = / x * - , then assignValue(KeyboardEvent.key)
+// To-do: Refactor the hasDecimal block... I don't know how I made it work lol.
 
 let value1 = '';
 let value2 = '';
@@ -35,20 +35,56 @@ multiplyButton.addEventListener('click', () => {
 
 const equalsButton = document.querySelector('#equals');
 equalsButton.addEventListener('click', () => {
-  // ignore if no second value
+  if (value1 === '') return;
   operate(value1, value2, operator);
 });
 
-const calcDisplay = document.querySelector('#display > p');
+window.addEventListener('keydown', (e) => {
+  e.preventDefault();
+  if (e.key.match(/[0-9\.]/)) {
+    const numButton = document.querySelector(`button[data-key="${e.key}"]`)
+    numButton.click();
+    numButton.focus();
+    numButton.classList.add('clicked');
+  }
+  if (e.key === '+') {
+    plusButton.click();
+    plusButton.focus();
+  }
+  if (e.key === '-') {
+    subtractButton.click();
+    subtractButton.focus();
+  }
+  if (e.key === '*' || e.key === 'x') {
+    multiplyButton.click();
+    multiplyButton.focus();
+  }
+  if (e.key === '/') {
+    divideButton.click();
+    divideButton.focus();
+  }
+  if (e.key === '=' || e.key === 'Enter') {
+    equalsButton.click();
+  }
+});
+
 const numberButtons = document.querySelectorAll('.number');
-// NUMBER BUTTON INPUT
+// Capture number button clicks & display them
 numberButtons.forEach((button) => {
   button.addEventListener('click', (e) => {
-    assignValue(e.target.textContent)
-    updateDisplay();
+    assignValue(e.target.textContent);
   });
 });
 
+// Apply animation on button click
+numberButtons.forEach((button) => {
+  button.addEventListener('transitionend', (e) => {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('clicked');
+  });
+});
+
+// Determine which value variable to assign the button click
 const assignValue = (input) => {
   // Don't allow > 1 decimal
   if (
@@ -69,6 +105,7 @@ const assignValue = (input) => {
   } else if (operator !== '') {
     value2 += input;
   }
+  updateDisplay();
 };
 
 const hasDecimal = (str) => {
@@ -125,6 +162,8 @@ const operate = (v1, v2, op) => {
 };
 
 const updateDisplay = () => {
+  const calcDisplay = document.querySelector('#display > p');
+
   if (value2.length > 0) {
     calcDisplay.textContent = value2;
   } else {
