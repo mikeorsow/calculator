@@ -3,32 +3,39 @@ let value2 = '';
 let operator = '';
 let canAppendToValue1 = true;
 
+const OPERATORS = {
+  plus: '+',
+  subtract: '-',
+  multiply: '*',
+  divide: '/',
+}
+
 const plusButton = document.querySelector('#sum');
 plusButton.addEventListener('click', () => {
   if (value1 === '') return;
   operate(value1, value2, operator);
-  operator = 'plus';
+  operator = OPERATORS.plus;
 });
 
 const subtractButton = document.querySelector('#subtract');
 subtractButton.addEventListener('click', () => {
   if (value1 === '') return;
   operate(value1, value2, operator);
-  operator = 'subtract';
+  operator = OPERATORS.subtract;
 });
 
 const divideButton = document.querySelector('#divide');
 divideButton.addEventListener('click', () => {
   if (value1 === '') return;
   operate(value1, value2, operator);
-  operator = 'divide';
+  operator = OPERATORS.divide;
 });
 
 const multiplyButton = document.querySelector('#multiply');
 multiplyButton.addEventListener('click', () => {
   if (value1 === '') return;
   operate(value1, value2, operator);
-  operator = 'multiply';
+  operator = OPERATORS.multiply;
 });
 
 const equalsButton = document.querySelector('#equals');
@@ -90,14 +97,14 @@ numberButtons.forEach((button) => {
 const assignValue = (input) => {
   // Block when users try to add multiple decimals
   if (
-    (input === '.' && hasDecimal(value1) && canAppendToValue1) ||
-    (input === '.' && hasDecimal(value2))
+    input === '.' &&
+    ((hasDecimal(value1) && canAppendToValue1) || hasDecimal(value2))
   ) {
     return;
   }
   // Don't let people enter a ton of zeros before the number
   if (value1 === '0' || value2 === '0') {
-    removeLeadingZero();
+    removeLeadingZero(input);
   }
   if (canAppendToValue1) {
     value1 += input;
@@ -136,7 +143,8 @@ const clear = () => {
   updateDisplay();
 };
 
-const removeLeadingZero = () => {
+const removeLeadingZero = (number) => {
+  if (number === '.') return;
   if (value1.indexOf('0') === 0) value1 = value1.slice(1);
   if (value2.indexOf('0') === 0) value2 = value2.slice(1);
 };
@@ -149,25 +157,41 @@ const operate = (v1, v2, op) => {
     return;
   }
 
+  if (v1 === '.' || v2 === '.') {
+    showMessage(`That just ain't right.`);
+    return;
+  }
+
   let total;
   v1 = Number(v1);
   v2 = Number(v2);
 
-  if (operator == 'divide' && v2 === 0) {
-    clear();
-    return (document.querySelector(
-      '#display > p'
-    ).textContent = `Inconceivable!`);
+  if (op == 'divide' && v2 === 0) {
+    showMessage('Inconceivable!');
+    return;
   }
-  if (op == 'plus') total = v1 + v2;
-  if (op == 'subtract') total = v1 - v2;
-  if (op == 'divide') total = v1 / v2;
-  if (op == 'multiply') total = v1 * v2;
+
+  switch (op) {
+    case OPERATORS.plus:
+      total = sum(v1, v2);
+      break;
+    case OPERATORS.subtract:
+      total = subtract(v1, v2);
+      break;
+    case OPERATORS.divide:
+      total = divide(v1, v2);
+      break;
+    case OPERATORS.multiply:
+      total = multiply(v1, v2);
+      break;
+  }
 
   clear();
   canAppendToValue1 = false;
+
   // Round the number to 10 decimal places
   total = Math.round(total * 10 ** 10) / 10 ** 10;
+
   // Display the total so that it fits on the calc screen
   if (total.toString().length > 15) {
     value1 = total.toExponential(4);
@@ -177,12 +201,21 @@ const operate = (v1, v2, op) => {
   updateDisplay();
 };
 
+const sum = (a, b) => a + b;
+const subtract = (a, b) => a - b;
+const multiply = (a, b) => a * b;
+const divide = (a, b) => a / b;
+
 const updateDisplay = () => {
   const calcDisplay = document.querySelector('#display > p');
-
   if (value2.length > 0) {
     calcDisplay.textContent = value2;
   } else {
     calcDisplay.textContent = value1;
   }
+};
+
+const showMessage = (str) => {
+  clear();
+  document.querySelector('#display > p').textContent = str;
 };
