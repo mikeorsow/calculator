@@ -7,8 +7,9 @@ const OPERATORS = {
   plus: '+',
   subtract: '-',
   multiply: '*',
+  altMultiply: 'x',
   divide: '/',
-}
+};
 
 const plusButton = document.querySelector('#sum');
 plusButton.addEventListener('click', () => {
@@ -53,19 +54,19 @@ window.addEventListener('keydown', (e) => {
     numButton.focus();
     numButton.classList.add('clicked');
   }
-  if (e.key === '+') {
+  if (e.key === OPERATORS.plus) {
     plusButton.click();
     plusButton.focus();
   }
-  if (e.key === '-') {
+  if (e.key === OPERATORS.subtract) {
     subtractButton.click();
     subtractButton.focus();
   }
-  if (e.key === '*' || e.key === 'x') {
+  if (e.key === OPERATORS.multiply || e.key === OPERATORS.altMultiply) {
     multiplyButton.click();
     multiplyButton.focus();
   }
-  if (e.key === '/') {
+  if (e.key === OPERATORS.divide) {
     divideButton.click();
     divideButton.focus();
   }
